@@ -4,18 +4,43 @@
   "info": {
     "singularName": "knowledge-base",
     "pluralName": "knowledge-bases",
-    "displayName": "knowledge-base"
+    "displayName": "Knowledge Base Page"
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "title": {
+    "HeadingTitle": {
       "type": "string"
     },
-    "subtitle": {
+    "HeadingSubtitle": {
       "type": "string"
+    },
+    "HeadingImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "Content": {
+      "type": "component",
+      "component": "knowledge-base.knowlege-content",
+      "repeatable": true
+    },
+    "Slug": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "regex": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "Category": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::category.category",
+      "mappedBy": "Knowledge"
     }
   }
 }

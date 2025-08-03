@@ -4,10 +4,53 @@
 
 export default {
   async customFindAll(ctx: any) {
-    const entries = await strapi.entityService.findMany(
-      "api::knowledge-base.knowledge-base",
-      {
-        status: "published",
+    const {
+      page = 1,
+      pageSize = 3,
+      sort = "latest",
+      search = "",
+      category,
+    } = ctx.query;
+
+    const pageNum = Number(page);
+    const pageSizeNum = Number(pageSize);
+    const start = (pageNum - 1) * pageSizeNum;
+
+    const filters: any = {
+      publishedAt: { $not: null },
+    };
+
+    if (search) {
+      filters.HeadingTitle = { $containsi: search };
+    }
+
+    if (category) {
+      filters.Category = {
+        Slug: { $eq: category },
+      };
+    }
+
+    const sortOption = (() => {
+      switch (sort) {
+        case "latest":
+          return [{ createdAt: "desc" }];
+        case "oldest":
+          return [{ createdAt: "asc" }];
+        case "az":
+          return [{ HeadingTitle: "asc" }];
+        case "za":
+          return [{ HeadingTitle: "desc" }];
+        default:
+          return [{ createdAt: "desc" }];
+      }
+    })();
+
+    const [entries, total] = await Promise.all([
+      strapi.db.query("api::knowledge-base.knowledge-base").findMany({
+        where: filters,
+        orderBy: sortOption,
+        offset: start,
+        limit: pageSizeNum,
         populate: {
           HeadingImage: true,
           Content: {
@@ -17,8 +60,11 @@ export default {
           },
           Category: true,
         },
-      }
-    );
+      }),
+      strapi.db.query("api::knowledge-base.knowledge-base").count({
+        where: filters,
+      }),
+    ]);
 
     const simplifiedData = entries.map((entry: any) => ({
       id: entry.id,
@@ -45,6 +91,14 @@ export default {
 
     ctx.body = {
       data: simplifiedData,
+      meta: {
+        pagination: {
+          page: Number(page),
+          pageSize: Number(pageSize),
+          total,
+          pageCount: Math.ceil(total / Number(pageSize)),
+        },
+      },
       message: "SUCCESS",
       status: 200,
     };

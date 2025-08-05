@@ -25,6 +25,11 @@
         "files"
       ]
     },
+    "HeadingColor": {
+      "type": "customField",
+      "customField": "plugin::color-picker.color",
+      "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+    },
     "Content": {
       "type": "component",
       "component": "knowledge-base.knowlege-content",

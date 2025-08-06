@@ -1,0 +1,21 @@
+{
+    "collectionName": "components_knowledge_base_contents",
+    "info": {
+        "displayName": "content",
+        "icon": "book"
+    },
+    "options": {},
+    "attributes": {
+        "Title": {
+            "type": "string"
+        },
+        "Content": {
+            "type": "customField",
+            "customField": "plugin::ckeditor5.CKEditor",
+            "options": {
+                "preset": "defaultHtml"
+            }
+        }
+    },
+    "config": {}
+}

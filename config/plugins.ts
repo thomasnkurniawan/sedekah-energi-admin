@@ -22,7 +22,7 @@ export default () => ({
     config: {
       customFields: [
         {
-          name: "Color Pallete",
+          name: "Color-Pallete",
           description: "Select a Color Pallete or Pick Custom",
           icon: "Palette",
           fetchItems: () => ({ items: categories }),

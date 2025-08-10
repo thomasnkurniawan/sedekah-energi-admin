@@ -91,6 +91,7 @@ export default {
         ).map((item: any) => ({
           title: item?.Title,
           content: item?.Content,
+          url: item?.URL,
         })),
       })),
       createdAt: entry.createdAt,
@@ -134,7 +135,7 @@ export default {
       ctx.notFound("No data found");
       return;
     }
-    console.log(entry);
+
     const simplifiedData = entry.map((entry: any) => ({
       id: entry.id,
       title: entry.HeadingTitle,
@@ -159,6 +160,7 @@ export default {
         ).map((item: any) => ({
           title: item?.Title,
           content: item?.Content,
+          url: item?.URL,
         })),
       })),
     }));
@@ -168,23 +170,53 @@ export default {
       status: 200,
     };
   },
-  async getKnowledgePreview() {
-    const entry: any[] = await strapi.entityService.findMany(
+  async getKnowledgePreview(ctx) {
+    console.log("asd");
+    const entries: any[] = await strapi.entityService.findMany(
       "api::knowledge-base.knowledge-base",
       {
         status: "draft",
-        populate: {
-          HeadingImage: true,
-          Content: {
-            populate: {
-              ContentSection: true,
-            },
-          },
-          Category: true,
-        },
+        populate: "*",
       }
     );
 
-    console.log(entry);
+    console.log(entries);
+    const simplifiedData = entries.map((entry: any) => ({
+      id: entry.id,
+      title: entry.HeadingTitle,
+      subtitle: entry.HeadingSubtitle,
+      slug: entry.HeadingTitle.toLowerCase().replace(/\s/g, "-"),
+      category: entry.Category?.map((category: any) => ({
+        id: category.id,
+        name: category.Category,
+        slug: category.Slug,
+      })),
+      headingImageUrl:
+        entry.HeadingImage?.formats?.medium?.url || entry.HeadingImage?.url,
+      headingColor: {
+        isCustom: entry.HeadingBackgroundColorTemplate === "custom",
+        value: entry.HeadingBackgroundColorTemplate,
+        custom: entry.HeadingBackgroundColor,
+      },
+      sections: entry.Content?.map((section: any) => ({
+        sectionTitle: section.TitleSection,
+        content: section.ContentSection?.filter(
+          (item: any) => item?.Title || item?.Content
+        ).map((item: any) => ({
+          title: item?.Title,
+          content: item?.Content,
+          url: item?.URL,
+        })),
+      })),
+      createdAt: entry.createdAt,
+      updatedAt: entry.updatedAt,
+      publishedAt: entry.publishedAt,
+    }));
+
+    ctx.body = {
+      data: simplifiedData,
+      message: "SUCCESS",
+      status: 200,
+    };
   },
 };

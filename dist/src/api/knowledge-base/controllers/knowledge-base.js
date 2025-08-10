@@ -80,6 +80,7 @@ exports.default = {
                         content: (_a = section.ContentSection) === null || _a === void 0 ? void 0 : _a.filter((item) => (item === null || item === void 0 ? void 0 : item.Title) || (item === null || item === void 0 ? void 0 : item.Content)).map((item) => ({
                             title: item === null || item === void 0 ? void 0 : item.Title,
                             content: item === null || item === void 0 ? void 0 : item.Content,
+                            url: item === null || item === void 0 ? void 0 : item.URL,
                         })),
                     });
                 }),
@@ -121,7 +122,6 @@ exports.default = {
             ctx.notFound("No data found");
             return;
         }
-        console.log(entry);
         const simplifiedData = entry.map((entry) => {
             var _a, _b, _c, _d, _e, _f;
             return ({
@@ -147,6 +147,7 @@ exports.default = {
                         content: (_a = section.ContentSection) === null || _a === void 0 ? void 0 : _a.filter((item) => (item === null || item === void 0 ? void 0 : item.Title) || (item === null || item === void 0 ? void 0 : item.Content)).map((item) => ({
                             title: item === null || item === void 0 ? void 0 : item.Title,
                             content: item === null || item === void 0 ? void 0 : item.Content,
+                            url: item === null || item === void 0 ? void 0 : item.URL,
                         })),
                     });
                 }),
@@ -158,19 +159,51 @@ exports.default = {
             status: 200,
         };
     },
-    async getKnowledgePreview() {
-        const entry = await strapi.entityService.findMany("api::knowledge-base.knowledge-base", {
+    async getKnowledgePreview(ctx) {
+        console.log("asd");
+        const entries = await strapi.entityService.findMany("api::knowledge-base.knowledge-base", {
             status: "draft",
-            populate: {
-                HeadingImage: true,
-                Content: {
-                    populate: {
-                        ContentSection: true,
-                    },
-                },
-                Category: true,
-            },
+            populate: "*",
         });
-        console.log(entry);
+        console.log(entries);
+        const simplifiedData = entries.map((entry) => {
+            var _a, _b, _c, _d, _e, _f;
+            return ({
+                id: entry.id,
+                title: entry.HeadingTitle,
+                subtitle: entry.HeadingSubtitle,
+                slug: entry.HeadingTitle.toLowerCase().replace(/\s/g, "-"),
+                category: (_a = entry.Category) === null || _a === void 0 ? void 0 : _a.map((category) => ({
+                    id: category.id,
+                    name: category.Category,
+                    slug: category.Slug,
+                })),
+                headingImageUrl: ((_d = (_c = (_b = entry.HeadingImage) === null || _b === void 0 ? void 0 : _b.formats) === null || _c === void 0 ? void 0 : _c.medium) === null || _d === void 0 ? void 0 : _d.url) || ((_e = entry.HeadingImage) === null || _e === void 0 ? void 0 : _e.url),
+                headingColor: {
+                    isCustom: entry.HeadingBackgroundColorTemplate === "custom",
+                    value: entry.HeadingBackgroundColorTemplate,
+                    custom: entry.HeadingBackgroundColor,
+                },
+                sections: (_f = entry.Content) === null || _f === void 0 ? void 0 : _f.map((section) => {
+                    var _a;
+                    return ({
+                        sectionTitle: section.TitleSection,
+                        content: (_a = section.ContentSection) === null || _a === void 0 ? void 0 : _a.filter((item) => (item === null || item === void 0 ? void 0 : item.Title) || (item === null || item === void 0 ? void 0 : item.Content)).map((item) => ({
+                            title: item === null || item === void 0 ? void 0 : item.Title,
+                            content: item === null || item === void 0 ? void 0 : item.Content,
+                            url: item === null || item === void 0 ? void 0 : item.URL,
+                        })),
+                    });
+                }),
+                createdAt: entry.createdAt,
+                updatedAt: entry.updatedAt,
+                publishedAt: entry.publishedAt,
+            });
+        });
+        ctx.body = {
+            data: simplifiedData,
+            message: "SUCCESS",
+            status: 200,
+        };
     },
 };

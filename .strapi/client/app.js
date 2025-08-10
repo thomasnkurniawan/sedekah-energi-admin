@@ -7,6 +7,7 @@ import strapiCloud from "@strapi/plugin-cloud/strapi-admin";
 import colorPicker from "@strapi/plugin-color-picker/strapi-admin";
 import usersPermissions from "@strapi/plugin-users-permissions/strapi-admin";
 import genericCustomFields from "strapi-plugin-generic-custom-fields/strapi-admin";
+import superfields from "strapi-plugin-superfields/strapi-admin";
 import { renderAdmin } from "@strapi/strapi/admin";
 
 renderAdmin(document.getElementById("strapi"), {
@@ -16,5 +17,6 @@ renderAdmin(document.getElementById("strapi"), {
     "color-picker": colorPicker,
     "users-permissions": usersPermissions,
     "generic-custom-fields": genericCustomFields,
+    superfields: superfields,
   },
 });

@@ -15,6 +15,14 @@ export interface KnowledgeBaseContent extends Struct.ComponentSchema {
         }
       >;
     Title: Schema.Attribute.String;
+    URL: Schema.Attribute.String &
+      Schema.Attribute.CustomField<
+        'plugin::superfields.tooltip-field',
+        {
+          description: 'Field untuk menampilkan tombol download';
+          'tooltip-content': 'Tombol Download';
+        }
+      >;
   };
 }
 

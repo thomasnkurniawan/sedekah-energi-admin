@@ -25,11 +25,6 @@
         "files"
       ]
     },
-    "HeadingColor": {
-      "type": "customField",
-      "customField": "plugin::color-picker.color",
-      "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
-    },
     "Content": {
       "type": "component",
       "component": "knowledge-base.knowlege-content",
@@ -46,6 +41,15 @@
       "relation": "manyToMany",
       "target": "api::category.category",
       "mappedBy": "Knowledge"
+    },
+    "HeadingBackgroundColor": {
+      "type": "customField",
+      "customField": "plugin::color-picker.color",
+      "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+    },
+    "HeadingBackgroundColorTemplate": {
+      "type": "customField",
+      "customField": "plugin::generic-custom-fields.color-pallete"
     }
   }
 }

@@ -14,16 +14,8 @@ export default {
     },
     {
       method: "GET",
-      path: "/knowledge-bases/slugs",
-      handler: "api::knowledge-base.knowledge-base.getAllSlugs",
-      config: {
-        policies: [],
-      },
-    },
-    {
-      method: "GET",
-      path: "/knowledge-bases/:slug",
-      handler: "api::knowledge-base.knowledge-base.getBySlug",
+      path: "/knowledge-bases/:id",
+      handler: "api::knowledge-base.knowledge-base.getKnowledgeById",
       config: {
         policies: [],
       },

@@ -65,12 +65,13 @@ export default {
         where: filters,
       }),
     ]);
+
     console.log(entries);
     const simplifiedData = entries.map((entry: any) => ({
       id: entry.id,
       title: entry.HeadingTitle,
       subtitle: entry.HeadingSubtitle,
-      slug: entry.Slug,
+      slug: entry.HeadingTitle.toLowerCase().replace(/\s/g, "-"),
       category: entry.Category?.map((category: any) => ({
         id: category.id,
         name: category.Category,
@@ -78,7 +79,11 @@ export default {
       })),
       headingImageUrl:
         entry.HeadingImage?.formats?.medium?.url || entry.HeadingImage?.url,
-      headingColor: entry.HeadingColor,
+      headingColor: {
+        isCustom: entry.HeadingBackgroundColorTemplate === "custom",
+        value: entry.HeadingBackgroundColorTemplate,
+        custom: entry.HeadingBackgroundColor,
+      },
       sections: entry.Content?.map((section: any) => ({
         sectionTitle: section.TitleSection,
         content: section.ContentSection?.filter(
@@ -107,13 +112,13 @@ export default {
       status: 200,
     };
   },
-  async getBySlug(ctx: any) {
-    const { slug } = ctx.params;
+  async getKnowledgeById(ctx: any) {
+    const { id } = ctx.params;
     const entry: any[] = await strapi.entityService.findMany(
       "api::knowledge-base.knowledge-base",
       {
         status: "published",
-        filters: { Slug: slug },
+        filters: { id },
         populate: {
           HeadingImage: true,
           Content: {
@@ -134,8 +139,12 @@ export default {
       id: entry.id,
       title: entry.HeadingTitle,
       subtitle: entry.HeadingSubtitle,
-      headingColor: entry.HeadingColor,
-      slug: entry.Slug,
+      headingColor: {
+        isCustom: entry.HeadingBackgroundColorTemplate === "custom",
+        value: entry.HeadingBackgroundColorTemplate,
+        custom: entry.HeadingBackgroundColor,
+      },
+      slug: entry.HeadingTitle.toLowerCase().replace(/\s/g, "-"),
       category: entry.Category?.map((category: any) => ({
         id: category.id,
         name: category.Category,
@@ -155,28 +164,6 @@ export default {
     }));
     ctx.body = {
       data: simplifiedData[0],
-      message: "SUCCESS",
-      status: 200,
-    };
-  },
-  async getAllSlugs(ctx: any) {
-    console.log("getAllData");
-    const entries = await strapi.entityService.findMany(
-      "api::knowledge-base.knowledge-base",
-      {
-        status: "published",
-        fields: ["Slug", "HeadingTitle", "publishedAt"],
-        sort: { HeadingTitle: "asc" },
-      }
-    );
-
-    const result = entries.map((entry: any) => ({
-      slug: entry.Slug,
-      title: entry.HeadingTitle,
-    }));
-
-    ctx.body = {
-      data: result,
       message: "SUCCESS",
       status: 200,
     };

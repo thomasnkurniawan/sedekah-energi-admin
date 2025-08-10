@@ -426,8 +426,10 @@ export interface ApiKnowledgeBaseKnowledgeBase
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    HeadingColor: Schema.Attribute.String &
+    HeadingBackgroundColor: Schema.Attribute.String &
       Schema.Attribute.CustomField<'plugin::color-picker.color'>;
+    HeadingBackgroundColorTemplate: Schema.Attribute.String &
+      Schema.Attribute.CustomField<'plugin::generic-custom-fields.color-pallete'>;
     HeadingImage: Schema.Attribute.Media<'images' | 'files'>;
     HeadingSubtitle: Schema.Attribute.String;
     HeadingTitle: Schema.Attribute.String;

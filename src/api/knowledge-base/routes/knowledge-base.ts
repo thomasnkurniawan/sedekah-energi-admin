@@ -20,5 +20,13 @@ export default {
         policies: [],
       },
     },
+     {
+      method: "GET",
+      path: "/knowledge-bases/preview",
+      handler: "api::knowledge-base.knowledge-base.getKnowledgePreview",
+      config: {
+        policies: [],
+      },
+    },
   ],
 };

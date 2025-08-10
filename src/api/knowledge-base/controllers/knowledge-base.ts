@@ -168,4 +168,23 @@ export default {
       status: 200,
     };
   },
+  async getKnowledgePreview() {
+    const entry: any[] = await strapi.entityService.findMany(
+      "api::knowledge-base.knowledge-base",
+      {
+        status: "draft",
+        populate: {
+          HeadingImage: true,
+          Content: {
+            populate: {
+              ContentSection: true,
+            },
+          },
+          Category: true,
+        },
+      }
+    );
+
+    console.log(entry);
+  },
 };

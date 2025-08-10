@@ -1,0 +1,19 @@
+{
+    "collectionName": "components_knowledge_base_knowlege_contents",
+    "info": {
+        "displayName": "knowlege_content",
+        "icon": "quote"
+    },
+    "options": {},
+    "attributes": {
+        "TitleSection": {
+            "type": "string"
+        },
+        "ContentSection": {
+            "type": "component",
+            "component": "knowledge-base.content",
+            "repeatable": true
+        }
+    },
+    "config": {}
+}

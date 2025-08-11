@@ -5,6 +5,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = {
     async customFindAll(ctx) {
+        var _a, _b;
         const { page = 1, pageSize = 3, sort = "latest", search = "", category, } = ctx.query;
         const pageNum = Number(page);
         const pageSizeNum = Number(pageSize);
@@ -44,7 +45,11 @@ exports.default = {
                     HeadingImage: true,
                     Content: {
                         populate: {
-                            ContentSection: true,
+                            ContentSection: {
+                                populate: {
+                                    ButtonDownload: true,
+                                },
+                            },
                         },
                     },
                     Category: true,
@@ -54,7 +59,7 @@ exports.default = {
                 where: filters,
             }),
         ]);
-        console.log(entries);
+        console.log((_b = (_a = entries[0]) === null || _a === void 0 ? void 0 : _a.Content[0]) === null || _b === void 0 ? void 0 : _b.ContentSection);
         const simplifiedData = entries.map((entry) => {
             var _a, _b, _c, _d, _e, _f;
             return ({
@@ -80,7 +85,10 @@ exports.default = {
                         content: (_a = section.ContentSection) === null || _a === void 0 ? void 0 : _a.filter((item) => (item === null || item === void 0 ? void 0 : item.Title) || (item === null || item === void 0 ? void 0 : item.Content)).map((item) => ({
                             title: item === null || item === void 0 ? void 0 : item.Title,
                             content: item === null || item === void 0 ? void 0 : item.Content,
-                            url: item === null || item === void 0 ? void 0 : item.URL,
+                            downloadButtons: item === null || item === void 0 ? void 0 : item.ButtonDownload.map((btn) => ({
+                                url: btn.ButtonUrl,
+                                text: btn.ButtonText,
+                            })),
                         })),
                     });
                 }),
@@ -112,7 +120,11 @@ exports.default = {
                 HeadingImage: true,
                 Content: {
                     populate: {
-                        ContentSection: true,
+                        ContentSection: {
+                            populate: {
+                                ButtonDownload: true,
+                            },
+                        },
                     },
                 },
                 Category: true,
@@ -147,7 +159,10 @@ exports.default = {
                         content: (_a = section.ContentSection) === null || _a === void 0 ? void 0 : _a.filter((item) => (item === null || item === void 0 ? void 0 : item.Title) || (item === null || item === void 0 ? void 0 : item.Content)).map((item) => ({
                             title: item === null || item === void 0 ? void 0 : item.Title,
                             content: item === null || item === void 0 ? void 0 : item.Content,
-                            url: item === null || item === void 0 ? void 0 : item.URL,
+                            downloadButtons: item === null || item === void 0 ? void 0 : item.ButtonDownload.map((btn) => ({
+                                url: btn.ButtonUrl,
+                                text: btn.ButtonText,
+                            })),
                         })),
                     });
                 }),
@@ -163,7 +178,19 @@ exports.default = {
         console.log("asd");
         const entries = await strapi.entityService.findMany("api::knowledge-base.knowledge-base", {
             status: "draft",
-            populate: "*",
+            populate: {
+                HeadingImage: true,
+                Content: {
+                    populate: {
+                        ContentSection: {
+                            populate: {
+                                ButtonDownload: true,
+                            },
+                        },
+                    },
+                },
+                Category: true,
+            },
         });
         console.log(entries);
         const simplifiedData = entries.map((entry) => {
@@ -191,7 +218,10 @@ exports.default = {
                         content: (_a = section.ContentSection) === null || _a === void 0 ? void 0 : _a.filter((item) => (item === null || item === void 0 ? void 0 : item.Title) || (item === null || item === void 0 ? void 0 : item.Content)).map((item) => ({
                             title: item === null || item === void 0 ? void 0 : item.Title,
                             content: item === null || item === void 0 ? void 0 : item.Content,
-                            url: item === null || item === void 0 ? void 0 : item.URL,
+                            downloadButtons: item === null || item === void 0 ? void 0 : item.ButtonDownload.map((btn) => ({
+                                url: btn.ButtonUrl,
+                                text: btn.ButtonText,
+                            })),
                         })),
                     });
                 }),

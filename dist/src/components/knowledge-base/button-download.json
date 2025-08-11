@@ -1,0 +1,17 @@
+{
+    "collectionName": "components_knowledge_base_button_downloads",
+    "info": {
+        "displayName": "ButtonDownload",
+        "icon": "arrowDown"
+    },
+    "options": {},
+    "attributes": {
+        "ButtonText": {
+            "type": "string"
+        },
+        "ButtonUrl": {
+            "type": "string"
+        }
+    },
+    "config": {}
+}

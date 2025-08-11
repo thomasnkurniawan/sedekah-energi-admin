@@ -1,5 +1,17 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface KnowledgeBaseButtonDownload extends Struct.ComponentSchema {
+  collectionName: 'components_knowledge_base_button_downloads';
+  info: {
+    displayName: 'ButtonDownload';
+    icon: 'arrowDown';
+  };
+  attributes: {
+    ButtonText: Schema.Attribute.String;
+    ButtonUrl: Schema.Attribute.String;
+  };
+}
+
 export interface KnowledgeBaseContent extends Struct.ComponentSchema {
   collectionName: 'components_knowledge_base_contents';
   info: {
@@ -7,6 +19,10 @@ export interface KnowledgeBaseContent extends Struct.ComponentSchema {
     icon: 'book';
   };
   attributes: {
+    ButtonDownload: Schema.Attribute.Component<
+      'knowledge-base.button-download',
+      true
+    >;
     Content: Schema.Attribute.RichText &
       Schema.Attribute.CustomField<
         'plugin::ckeditor5.CKEditor',
@@ -15,14 +31,6 @@ export interface KnowledgeBaseContent extends Struct.ComponentSchema {
         }
       >;
     Title: Schema.Attribute.String;
-    URL: Schema.Attribute.String &
-      Schema.Attribute.CustomField<
-        'plugin::superfields.tooltip-field',
-        {
-          description: 'Field untuk menampilkan tombol download';
-          'tooltip-content': 'Tombol Download';
-        }
-      >;
   };
 }
 
@@ -41,6 +49,7 @@ export interface KnowledgeBaseKnowlegeContent extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'knowledge-base.button-download': KnowledgeBaseButtonDownload;
       'knowledge-base.content': KnowledgeBaseContent;
       'knowledge-base.knowlege-content': KnowledgeBaseKnowlegeContent;
     }

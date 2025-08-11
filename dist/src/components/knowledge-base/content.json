@@ -16,13 +16,10 @@
                 "preset": "defaultHtml"
             }
         },
-        "URL": {
-            "type": "customField",
-            "customField": "plugin::superfields.tooltip-field",
-            "options": {
-                "tooltip-content": "Tombol Download",
-                "description": "Field untuk menampilkan tombol download"
-            }
+        "ButtonDownload": {
+            "type": "component",
+            "component": "knowledge-base.button-download",
+            "repeatable": true
         }
     },
     "config": {}

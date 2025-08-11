@@ -55,7 +55,11 @@ export default {
           HeadingImage: true,
           Content: {
             populate: {
-              ContentSection: true,
+              ContentSection: {
+                populate: {
+                  ButtonDownload: true,
+                },
+              },
             },
           },
           Category: true,
@@ -66,7 +70,7 @@ export default {
       }),
     ]);
 
-    console.log(entries);
+    console.log(entries[0]?.Content[0]?.ContentSection);
     const simplifiedData = entries.map((entry: any) => ({
       id: entry.id,
       title: entry.HeadingTitle,
@@ -91,7 +95,10 @@ export default {
         ).map((item: any) => ({
           title: item?.Title,
           content: item?.Content,
-          url: item?.URL,
+          downloadButtons: item?.ButtonDownload.map((btn) => ({
+            url: btn.ButtonUrl,
+            text: btn.ButtonText,
+          })),
         })),
       })),
       createdAt: entry.createdAt,
@@ -124,7 +131,11 @@ export default {
           HeadingImage: true,
           Content: {
             populate: {
-              ContentSection: true,
+              ContentSection: {
+                populate: {
+                  ButtonDownload: true,
+                },
+              },
             },
           },
           Category: true,
@@ -160,7 +171,10 @@ export default {
         ).map((item: any) => ({
           title: item?.Title,
           content: item?.Content,
-          url: item?.URL,
+          downloadButtons: item?.ButtonDownload.map((btn) => ({
+            url: btn.ButtonUrl,
+            text: btn.ButtonText,
+          })),
         })),
       })),
     }));
@@ -176,7 +190,19 @@ export default {
       "api::knowledge-base.knowledge-base",
       {
         status: "draft",
-        populate: "*",
+        populate: {
+          HeadingImage: true,
+          Content: {
+            populate: {
+              ContentSection: {
+                populate: {
+                  ButtonDownload: true,
+                },
+              },
+            },
+          },
+          Category: true,
+        },
       }
     );
 
@@ -205,7 +231,10 @@ export default {
         ).map((item: any) => ({
           title: item?.Title,
           content: item?.Content,
-          url: item?.URL,
+          downloadButtons: item?.ButtonDownload.map((btn) => ({
+            url: btn.ButtonUrl,
+            text: btn.ButtonText,
+          })),
         })),
       })),
       createdAt: entry.createdAt,

@@ -5,7 +5,7 @@
 
 APP_NAME="strapi-admin"
 APP_DIR="/var/www/$APP_NAME"
-GIT_REPO="git@github.com:username/repo-strapi.git" # ganti repo kamu
+GIT_REPO="https://github.com/thomasnkurniawan/sedekah-energi-admin.git"
 NODE_ENV="production"
 DOMAIN="admin-sedekahenergi.mosaic-indonesia.com"
 PM2_NAME="strapi-admin"
@@ -42,7 +42,6 @@ npm install --production
 
 # 3️⃣ Build admin panel
 echo "🏗 Building admin panel..."
-export NODE_OPTIONS="--max-old-space-size=2048"
 npm run build
 
 # 4️⃣ Setup environment file
